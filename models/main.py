@@ -22,11 +22,13 @@ from utils.main_utils import *
 from utils.model_utils import read_data
 
 os.environ["WANDB_API_KEY"] = ""
-os.environ["WANDB_MODE"] = "offline"
+os.environ["WANDB_MODE"] = "online"
 
 def main():
     args = parse_args()
     check_args(args)
+    os.environ["WANDB_API_KEY"] = args.api
+    
 
     # Set the random seed if provided (affects client sampling and batching)
     random.seed(args.seed)
