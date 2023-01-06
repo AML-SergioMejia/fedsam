@@ -10,6 +10,11 @@ SIM_TIMES = ['small', 'medium', 'large']
 def parse_args():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('-api',
+                    help='API Key for wandb;',
+                    type=str,
+                    required=True)
+
     parser.add_argument('-dataset',
                     help='name of dataset;',
                     type=str,
