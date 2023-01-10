@@ -148,6 +148,7 @@ class ClientModel(nn.Module):
         self.softmax = nn.Softmax()
 
         self.apply(_weights_init)
+        self.size = self.model_size()
 
     def forward(self, x):
         
