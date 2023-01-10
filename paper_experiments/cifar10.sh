@@ -2,7 +2,7 @@
 
 pushd ../models
 
-declare -a alphas=("1000" "0" "0.5")
+declare -a alphas=("100" "0" "0.5")
 wandb_api_key=$1
 
 function run_fedavg() {
