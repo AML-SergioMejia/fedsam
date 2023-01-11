@@ -43,7 +43,7 @@ class ClientDataset(Dataset):
                                         transforms.RandomCrop(IMAGE_SIZE, padding=4),
                                         transforms.RandomHorizontalFlip(),
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+                                        transforms.Normalize((0.5071, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761)),
                                     ])
             self.test_transform = None
             if cutout is not None:
@@ -52,7 +52,7 @@ class ClientDataset(Dataset):
             self.train_transform = None
             self.test_transform = transforms.Compose([
                                         transforms.ToTensor(),
-                                        transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)),
+                                        transforms.Normalize((0.5071, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761)),
                                     ])
 
     def __len__(self):
