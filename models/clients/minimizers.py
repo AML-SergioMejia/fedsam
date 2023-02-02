@@ -67,4 +67,17 @@ class SAM(ASAM):
             p.add_(eps)
         self.optimizer.zero_grad()
 
+class AdaBest():
+    def __init__(self, optimizer, model, historical):
+        self.optimizer = optimizer
+        self.model = model
+        self.historical = historical
 
+    @torch.no_grad()
+    def step(self):
+        for name, param in self.model.named_parameters():
+            if param.grad is None:
+                continue
+            param.sub_(self.historical[name])
+        self.optimizer.step()
+        self.optimizer.zero_grad()

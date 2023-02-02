@@ -81,6 +81,8 @@ def define_server_params(args, client_model, server_name, opt_ckpt):
     elif server_name == 'fedopt':
         server_params = {'client_model': client_model, 'server_opt': args.server_opt, 'server_lr': args.server_lr,
                          'momentum': args.server_momentum, 'opt_ckpt': opt_ckpt}
+    elif server_name == 'adabest':
+        server_params = {'client_model': client_model, 'beta': args.beta}
     else:
         raise NotImplementedError
     return server_params
@@ -91,6 +93,8 @@ def define_client_params(client_name, args):
     if client_name == 'asam' or client_name == 'sam':
         client_params['rho'] = args.rho
         client_params['eta'] = args.eta
+    elif client_name == 'adabest':
+        client_params['mu'] = args.mu
 
     return client_params
 

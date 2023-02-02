@@ -298,7 +298,10 @@ def init_wandb(args, alpha=None, run_id=None):
         job_name = job_name + '_b' + str(args.server_momentum)
 
     if args.client_algorithm is not None:
-        job_name = job_name + '_' + args.client_algorithm
+        if args.client_algorithm != 'adabest':
+            job_name = job_name + '_' + args.client_algorithm
+        else:
+            job_name = job_name + '_beta' + str(args.beta) + '_mu' + str(args.mu)
         if args.client_algorithm == 'asam' or args.client_algorithm == 'sam':
             job_name += '_rho' + str(args.rho)
             if args.client_algorithm == 'asam':

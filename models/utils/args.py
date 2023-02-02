@@ -171,6 +171,15 @@ def parse_args():
                         type=float,
                         default=1e-4)
 
+    ## AdaBest hyperparams
+    parser.add_argument('-beta',
+                        help='Beta parameter for AdaBest server',
+                        type=float,
+                        default=None)
+    parser.add_argument('-mu',
+                        help='Mu parameter for AdaBest clients',
+                        type=float,
+                        default=None)
 
     ## ANALYSIS OPTIONS ##
     parser.add_argument('--metrics-name',
@@ -193,4 +202,7 @@ def parse_args():
 def check_args(args):
     if (args.client_algorithm == 'sam' or args.client_algorithm == 'asam') and (args.rho is None or args.eta is None):
         print("Specificy values for rho, eta and minimizer for running SAM or ASAM algorithm")
+        exit(-1)
+    if (args.client_algorithm == 'adabest' and args.algorithm != args.client_algorithm) and (args.beta is None or args.mu is None):
+        print('When using adabest both client_algorithm and algorithm should be set to "adabest" and "beta" and "mu" must be specified') 
         exit(-1)
