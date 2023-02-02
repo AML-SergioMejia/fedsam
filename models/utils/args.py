@@ -1,9 +1,9 @@
 import argparse
 
 DATASETS = ['cifar10', 'cifar100']
-SERVER_ALGORITHMS = ['fedavg', 'fedopt']
+SERVER_ALGORITHMS = ['fedavg', 'fedopt', 'adabest']
 SERVER_OPTS = ['sgd', 'adam', 'adagrad', 'fedavgm']
-CLIENT_ALGORITHMS = ['asam', 'sam']
+CLIENT_ALGORITHMS = ['asam', 'sam', 'adabest']
 MINIMIZERS = ['sam', 'asam']
 SIM_TIMES = ['small', 'medium', 'large']
 
