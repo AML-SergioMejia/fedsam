@@ -8,12 +8,12 @@ from .fedavg_server import Server
 
 
 class AdaBestServer(Server):
-    def __init__(self, server_model, server_opt, momentum=0, beta=0, opt_ckpt=None):
-        super().__init__(server_model)
-        print("Server optimizer:", server_opt, "and beta", beta)
+    def __init__(self, client_model, momentum=0, beta=0, opt_ckpt=None):
+        super().__init__(client_model)
+        self.server_model = client_model
+        print("beta", beta)
         self.server_momentum = momentum
         self.beta = beta
-        self.server_opt = self._get_optimizer(server_opt)
         if opt_ckpt is not None:
             self.load_optimizer_checkpoint(opt_ckpt)
         self.round = 0 # Number of rounds (to be sent to the client)
@@ -23,8 +23,6 @@ class AdaBestServer(Server):
     def train_model(self, num_epochs=1, batch_size=10, minibatch=None, clients=None, analysis=False):
         # Updating the number of rounds
         self.round += 1
-
-        self.server_opt.zero_grad()
  
         if clients is None:
             clients = self.selected_clients
@@ -65,7 +63,6 @@ class AdaBestServer(Server):
         """Saves the servers model and optimizer on checkpoints/dataset/model.ckpt."""
         # Save servers model
         save_info = {'model_state_dict': self.model,
-                     'opt_state_dict': self.server_opt.state_dict(),
                      'round': round}
         if self.swa_model is not None:
             save_info['swa_model'] = self.swa_model.state_dict()
