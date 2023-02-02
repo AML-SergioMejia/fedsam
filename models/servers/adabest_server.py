@@ -90,7 +90,7 @@ class AdaBestServer(Server):
             average_model: Average model, i.e. weighted average of the trained clients' deltas.
         """
         new_model = {}
-        for name, parameter in self.server_model.named_parameters():
+        for name, parameter in average_model.items():
             # h^t ← β(θ¯^{t−1} − θ¯^t) # Update oracle estimates
             self.historical[name] = self.beta * (self.prev_avg_model[name] - parameter)
             # θ^t ← θ¯^t - h^t # Update cloud (server) model
