@@ -277,7 +277,13 @@ def get_client_and_server(server_path, client_path):
 def init_wandb(args, alpha=None, run_id=None):
     group_name = args.algorithm
     if args.algorithm == 'fedopt':
-        group_name = group_name + '_' + args.server_opt
+        if args.server_lr == 1 and args.server_opt == 'sgd':
+            if args.server_momentum:
+                group_name = 'fedavgm'
+            else:
+                group_name = 'fedavg'
+        else:
+            group_name = group_name + '_' + args.server_opt
 
     configuration = args
     if alpha is not None:
