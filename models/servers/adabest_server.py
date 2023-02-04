@@ -104,7 +104,6 @@ class AdaBestServer(Server):
             {k: v for k, v in average_model.items() if "running" in k or "num_batches_tracked" in k})
         self.server_model.load_state_dict(bn_layers, strict=False)
 
-    """
     def _get_model_total_grad(self):
         total_norm = 0
         for name, p in self.server_model.named_parameters():
@@ -118,6 +117,7 @@ class AdaBestServer(Server):
         total_grad = total_norm ** 0.5
         # print("total grad norm:", total_grad)
         return total_grad
+    """
     
     def _get_optimizer(self, server_opt):
         "Returns optimizer given its name. If not allowed, NotImplementedError expcetion is raised."

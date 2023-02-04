@@ -78,6 +78,6 @@ class AdaBest():
         for name, param in self.model.named_parameters():
             if param.grad is None:
                 continue
-            param.sub_(self.historical[name])
+            param.grad.sub_(self.historical[name])
         self.optimizer.step()
         self.optimizer.zero_grad()
