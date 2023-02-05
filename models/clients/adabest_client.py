@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 import torch
 
 from .client import Client
@@ -14,10 +14,11 @@ class AdaBestClient(Client):
         self.mu = mu
         self.historical = { name: 0.0 for name, _ in self.model.named_parameters() }
         self.last_round = 0
-        self.server_model = { name: value for name, value in self.model.named_parameters() }
+        self.server_model = deepcopy(self.model.state_dict())
 
 
     def train(self, num_epochs=1, batch_size=10, minibatch=None, round=1):
+        self.server_model = deepcopy(self.model.state_dict())
         num_train_samples, update = super(AdaBestClient, self).train(num_epochs, batch_size, minibatch)
 
         # Update local gradient estimates
