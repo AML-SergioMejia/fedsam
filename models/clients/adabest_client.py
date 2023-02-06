@@ -6,23 +6,33 @@ from .minimizers import AdaBest
 
 
 class AdaBestClient(Client):
-
+    """
+    AdaBestClient: Client that simulates the algorithm of AdaBest as defined in 
+    "AdaBest: Minimizing Client Drift in Federated Learning via Adaptive Bias Estimation" 
+    https://arxiv.org/abs/2204.13170
+    
+        Parameters:
+        - mu: Regularization factor hyperparameter
+    """
     def __init__(self, seed, client_id, lr, weight_decay, batch_size, momentum, train_data, eval_data, model, mu, device=None,
                 num_workers=0, run=None, mixup=False, mixup_alpha=1.0):
         super().__init__(seed, client_id, lr, weight_decay, batch_size, momentum, train_data, eval_data, model, device,
                             num_workers, run, mixup, mixup_alpha)
         self.mu = mu
+        # Pseudo-gradients that work as local oracles (h_t)
         self.historical = { name: 0.0 for name, _ in self.model.named_parameters() }
+        # Last round the client participated in training (t'_i)
         self.last_round = 0
+        # Last received server model (\theta^{t-1})
         self.server_model = deepcopy(self.model.state_dict())
 
 
     def train(self, num_epochs=1, batch_size=10, minibatch=None, round=1):
+        # Save the received server model
         self.server_model = deepcopy(self.model.state_dict())
         num_train_samples, update = super(AdaBestClient, self).train(num_epochs, batch_size, minibatch)
 
-        # Update local gradient estimates
-        # local_gradient = { }
+        # After trainig update local gradient estimates
         new_historical = { }
         for name, value in self.model.named_parameters():
             # g^t_i ← θ^{t−1} − θ_i^{t,K}
@@ -45,7 +55,7 @@ class AdaBestClient(Client):
             inputs = inputs.to(self.device)
             targets = targets.to(self.device)
 
-            # Ascent Step
+            # Step
             outputs = self.model(inputs)
             loss = criterion(outputs, targets)
             loss.backward()

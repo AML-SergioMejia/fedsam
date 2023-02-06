@@ -68,6 +68,15 @@ class SAM(ASAM):
         self.optimizer.zero_grad()
 
 class AdaBest():
+    """
+    Optimizer that implements the AdaBest pseudo-gradient calculation
+    
+    Parameters:
+        optimizer: Optimizer being used for the client learning. To follow the paper
+        guidelines it should be SGD without momentum
+        model: Model on which to calculate the pseudo-gradients
+        historical: Local oracle values
+    """
     def __init__(self, optimizer, model, historical):
         self.optimizer = optimizer
         self.model = model
@@ -75,6 +84,7 @@ class AdaBest():
 
     @torch.no_grad()
     def step(self):
+        # g_i^{t, k-1} ← \nabla L_i(θ_i^{t,k-1}) - h_i^{t_i'}
         for name, param in self.model.named_parameters():
             if param.grad is None:
                 continue
